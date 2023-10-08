@@ -6,16 +6,12 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class EventsService {
-    constructor(@InjectRepository(Event) private userRepo: Repository<Event>){
+  constructor(@InjectRepository(Event) private userRepo: Repository<Event>) {}
 
-    }
+  getEvents() {}
 
-    
-    getEvents(){}
-
-    createEvent(eventDetails :CreateEvent){
-        const newEvent = this.userRepo.create(eventDetails)
-        this.userRepo.save(newEvent)
-    }
-
+  createEvent(eventDetails: CreateEvent) {
+    const newEvent = this.userRepo.create(eventDetails);
+    this.userRepo.save(newEvent);
+  }
 }

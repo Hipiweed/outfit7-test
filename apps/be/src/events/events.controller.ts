@@ -6,30 +6,30 @@ import { EventsService } from './events.service';
 @ApiTags('events')
 @Controller('events')
 export class EventsController {
-    constructor(private readonly eventsService: EventsService) {}
+  constructor(private readonly eventsService: EventsService) {}
 
-    @Get()
-    @ApiOperation({ summary: 'Retrieve all events' })
-    @ApiResponse({
-        status: 200,
-        description: 'Events successfully retrieved.',
-    })
-    async getEvents() {
-        return await this.eventsService.getEvents();
-    }
+  @Get()
+  @ApiOperation({ summary: 'Retrieve all events' })
+  @ApiResponse({
+    status: 200,
+    description: 'Events successfully retrieved.',
+  })
+  async getEvents() {
+    return await this.eventsService.getEvents();
+  }
 
-    @Post()
-    @ApiOperation({ summary: 'Create a new event' })
-    @ApiBody({ type: CreateEventDto })
-    @ApiResponse({
-        status: 201,
-        description: 'Event successfully created.',
-    })
-    @ApiResponse({
-        status: 400,
-        description: 'Invalid input.',
-    })
-    async createEvent(@Body() createEventDto: CreateEventDto) {
-        return await this.eventsService.createEvent(createEventDto);
-    }
+  @Post()
+  @ApiOperation({ summary: 'Create a new event' })
+  @ApiBody({ type: CreateEventDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Event successfully created.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid input.',
+  })
+  async createEvent(@Body() createEventDto: CreateEventDto) {
+    return await this.eventsService.createEvent(createEventDto);
+  }
 }
