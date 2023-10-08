@@ -5,6 +5,7 @@
   import { TypeOrmModule } from '@nestjs/typeorm';
   import { ConfigModule, ConfigService } from '@nestjs/config';
   import { DBService } from './services/dbService';
+import { EventsModule } from './events/events.module';
 
   @Module({
     imports: [
@@ -14,6 +15,7 @@
         inject: [ConfigService],
       }),
       ConfigModule.forRoot(),
+      EventsModule,
     ],
     controllers: [AppController],
     providers: [AppService],
