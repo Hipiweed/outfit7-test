@@ -3,6 +3,7 @@
 # compiled output
 apps/be/dist
 apps/be/node_modules
+apps/be/.env*
 
 # Logs
 logs
