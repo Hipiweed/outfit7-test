@@ -1,8 +1,9 @@
-import { Table, ActionIcon, Container, AppShell, Burger, Flex, Title } from '@mantine/core';
+import { Table, ActionIcon, Container, AppShell, Burger, Flex, Title, Modal } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { EventsApi, EventDto } from './api/api.ts';
 import { useEffect, useState } from 'react';
+import CreateEventForm from './components/createEventForm.tsx';
 
 
 
@@ -11,7 +12,8 @@ import { useEffect, useState } from 'react';
 
 const App: React.FC = () => {
 
-  const [opened, { toggle }] = useDisclosure();
+  const [openedBurger, { toggle:toggleBurger }] = useDisclosure();
+  const [openedModal, { open: openModal, close: closeModal }] = useDisclosure(false);
   const [events, setEvents] = useState<EventDto[]>()
 
   const eventsApi = new EventsApi();
@@ -45,11 +47,11 @@ const App: React.FC = () => {
   return (
     <AppShell
     header={{ height: 60 }}
-    navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !opened } }}
+    navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !openedBurger } }}
     padding="md"
   >
     <AppShell.Header>
-      <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+      <Burger opened={openedBurger} onClick={toggleBurger} hiddenFrom="sm" size="sm" />
       <Flex justify='center' ><Title order={1}>Event Log App</Title></Flex>
     </AppShell.Header>
 
@@ -71,6 +73,10 @@ const App: React.FC = () => {
         </Table>
       </Container>
     </AppShell.Main>
+
+    <Modal opened={openedModal} onClose={closeModal} title="Authentication">
+    <CreateEventForm/>
+    </Modal>
   </AppShell>
     
   );
