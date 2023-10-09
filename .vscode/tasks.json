@@ -1,0 +1,12 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "generate-api",
+			"problemMatcher": [],
+			"label": "npm: generate-api",
+			"detail": " openapi-generator-cli generate -i http://localhost:3000/api-json -g typescript-axios -o ./apps/fe/src/api"
+		}
+	]
+}

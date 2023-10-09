@@ -3,26 +3,14 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 
 
-const events = [
-  {
-    name: 'Event 1',
-    description: 'This is event 1',
-    type: "APP",
-    priority: 1
-  },
-  {
-    name: 'Event 2',
-    description: 'This is event 2',
-    type: "APP",
-    priority: 2
-  },
-  {
-    name: 'Event 3',
-    description: 'This is event 3',
-    type: "APP",
-    priority: 3
-  }
-];
+getEvents()
+.then((response) => {
+  const users = response.data;
+  // Process the response data
+})
+.catch((error) => {
+  // Handle the error
+});
 
 
 

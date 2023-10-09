@@ -8,7 +8,10 @@ import { Repository } from 'typeorm';
 export class EventsService {
   constructor(@InjectRepository(Event) private userRepo: Repository<Event>) {}
 
-  getEvents() {}
+  getEvents() {
+    const getEvent = this.userRepo.find();
+    return getEvent;
+  }
 
   createEvent(eventDetails: CreateEvent) {
     const newEvent = this.userRepo.create(eventDetails);
