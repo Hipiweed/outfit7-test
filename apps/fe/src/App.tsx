@@ -1,24 +1,33 @@
 import { Table, ActionIcon, Container, AppShell, Burger, Flex, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { EventsApi, EventDto } from './api/api.ts';
+import { useEffect, useState } from 'react';
 
 
-getEvents()
-.then((response) => {
-  const users = response.data;
-  // Process the response data
-})
-.catch((error) => {
-  // Handle the error
-});
+
 
 
 
 const App: React.FC = () => {
 
   const [opened, { toggle }] = useDisclosure();
+  const [events, setEvents] = useState<EventDto[]>()
 
-  const rows = events.map((event) => (
+  const eventsApi = new EventsApi();
+
+
+  useEffect(() => {
+    eventsApi.eventsControllerGetEvents()
+      .then((response) => {
+        setEvents(response.data);
+      })
+      .catch((error) => {
+        console.log(error)
+      });
+  }, []);
+
+  const rows = events?.map((event) => (
     <Table.Tr key={event.name}>
       <Table.Td>{event.name}</Table.Td>
       <Table.Td>{event.description}</Table.Td>
