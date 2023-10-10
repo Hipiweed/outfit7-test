@@ -34,10 +34,22 @@ export class EventsService {
   async updateEvent(eventId: number, eventDetails: CreateEvent) {
     const { name, priority } = eventDetails;
 
-    // Check if the name is unique
-    const existingEvent = await this.userRepo.count({ where: { name } });
-    if (existingEvent >= 2) {
-      throw new Error('Event with the same name already exists');
+    // Retrieve the existing event
+    const existingEvent = await this.userRepo.findOne({
+      where: { id: eventId },
+    });
+
+    if (!existingEvent) {
+      throw new Error('Event not found');
+    }
+
+    // Check if the name has changed
+    if (existingEvent.name !== name) {
+      // Check if the new name is unique
+      const eventWithNewName = await this.userRepo.findOne({ where: { name } });
+      if (eventWithNewName) {
+        throw new Error('Event with the same name already exists');
+      }
     }
 
     // Check if the priority is between 1 and 10
@@ -45,7 +57,7 @@ export class EventsService {
       throw new Error('Priority must be between 1 and 10');
     }
 
-    // Check if the name is unique
+    // Update the event
     return await this.userRepo.update({ id: eventId }, { ...eventDetails });
   }
 }
