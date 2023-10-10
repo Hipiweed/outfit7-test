@@ -1,11 +1,9 @@
-import { Table, ActionIcon, Container, AppShell, Burger, Flex, Title, Modal } from '@mantine/core';
+import { Table, ActionIcon, Container, AppShell, Burger, Flex, Title, Modal, Button } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react';
 import { EventsApi, EventDto } from './api/api.ts';
 import { useEffect, useState } from 'react';
 import CreateEventForm from './components/createEventForm.tsx';
-
-
 
 
 
@@ -15,9 +13,10 @@ const App: React.FC = () => {
   const [openedBurger, { toggle:toggleBurger }] = useDisclosure();
   const [openedModal, { open: openModal, close: closeModal }] = useDisclosure(false);
   const [events, setEvents] = useState<EventDto[]>()
+  const [selectedEvent, setSelectedEvent] = useState<EventDto | undefined>(undefined);
+
 
   const eventsApi = new EventsApi();
-
 
   useEffect(() => {
     eventsApi.eventsControllerGetEvents()
@@ -30,14 +29,17 @@ const App: React.FC = () => {
   }, []);
 
   const rows = events?.map((event) => (
-    <Table.Tr key={event.name}>
+    <Table.Tr key={event.id}>
       <Table.Td>{event.name}</Table.Td>
       <Table.Td>{event.description}</Table.Td>
       <Table.Td>{event.type}</Table.Td>
       <Table.Td>{event.priority}</Table.Td>
       <Table.Td>
         <Flex gap="md">
-          <ActionIcon><IconEdit /></ActionIcon>
+          <ActionIcon onClick={() => {
+            setSelectedEvent(event) 
+            openModal()
+          }}><IconEdit /></ActionIcon>
           <ActionIcon><IconTrash /></ActionIcon>
         </Flex>
       </Table.Td>
@@ -59,6 +61,12 @@ const App: React.FC = () => {
 
     <AppShell.Main>
       <Container>
+        <Flex justify={'end'}>
+          <Button my="md" rightSection={<IconPlus />} onClick={() => {
+            setSelectedEvent(undefined) 
+            openModal()
+          }}>New Event</Button>
+        </Flex>
         <Table>
           <Table.Thead>
             <Table.Tr>
@@ -74,8 +82,8 @@ const App: React.FC = () => {
       </Container>
     </AppShell.Main>
 
-    <Modal opened={openedModal} onClose={closeModal} title="Authentication">
-    <CreateEventForm/>
+    <Modal opened={openedModal} onClose={closeModal} title="CreateEvent">
+    <CreateEventForm row={selectedEvent} onClose={closeModal}/>
     </Modal>
   </AppShell>
     

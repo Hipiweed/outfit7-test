@@ -35,8 +35,8 @@ export class EventsService {
     const { name, priority } = eventDetails;
 
     // Check if the name is unique
-    const existingEvent = await this.userRepo.findOne({ where: { name } });
-    if (existingEvent && existingEvent.id !== eventId) {
+    const existingEvent = await this.userRepo.count({ where: { name } });
+    if (existingEvent >= 2) {
       throw new Error('Event with the same name already exists');
     }
 
@@ -45,8 +45,7 @@ export class EventsService {
       throw new Error('Priority must be between 1 and 10');
     }
 
-    const updatedEvent = this.userRepo.create(eventDetails);
-
-    this.userRepo.save(updatedEvent);
+    // Check if the name is unique
+    return await this.userRepo.update({ id: eventId }, { ...eventDetails });
   }
 }
