@@ -29,28 +29,36 @@ export class EventsService {
       throw new Error('Priority must be between 1 and 10');
     }
     if(eventDetails.type === "ADS") {
-     // Check if countryCode is not null
-     console.log()
-    if (countryCode == null )  throw new Error('Could not get countryCode');
+      // Check if countryCode is not null
+     if (countryCode == null )  throw new Error('Could not get countryCode');
 
-    const adsResponse = await firstValueFrom(this.httpService.get('https://us-central1-o7tools.cloudfunctions.net/fun7-ad-partner', {
-      params: {
-        countryCode
-      },
-      auth: {
-        username: 'fun7user',
-        password: 'fun7pass'
+     try {
+      const adsResponse = await firstValueFrom(this.httpService.get('https://us-central1-o7tools.cloudfunctions.net/fun7-ad-partner', {
+        params: {
+          countryCode
+        },
+        auth: {
+          username: 'fun7user',
+          password: 'fun7pass'
+        }
+      }));
+    
+      // Check if ads are enabled
+      if (adsResponse.data.ads === 'you shall not pass!') {
+        throw new Error('you shall not pass!');
       }
-    }));
-
-    // Check if ads are enabled
-    if(adsResponse.data.ads === 'you shall not pass!' ) 
-    throw new Error ('you shall not pass!')
-
+    } catch (error) {
+      if (error.message === 'you shall not pass!') {
+        throw error;
+      } else {
+        throw new Error('There was an unexpected problem, retry');
+      }
+    }
     }
     
     const newEvent = this.userRepo.create(eventDetails);
-    this.userRepo.save(newEvent);
+    
+    return this.userRepo.save(newEvent);
   }
 
   async updateEvent(eventId: number, countryCode: string, eventDetails: CreateEvent) {
@@ -74,21 +82,33 @@ export class EventsService {
       }
     }
 
-    if (countryCode == null)  throw new Error('Could not get countryCode');
+    if(eventDetails.type === "ADS") {
+      // Check if countryCode is not null
+     if (countryCode == null )  throw new Error('Could not get countryCode');
 
-    const adsResponse = await firstValueFrom(this.httpService.get('https://us-central1-o7tools.cloudfunctions.net/fun7-ad-partner', {
-      params: {
-        countryCode
-      },
-      auth: {
-        username: 'fun7user',
-        password: 'fun7pass'
+     try {
+      const adsResponse = await firstValueFrom(this.httpService.get('https://us-central1-o7tools.cloudfunctions.net/fun7-ad-partner', {
+        params: {
+          countryCode
+        },
+        auth: {
+          username: 'fun7user',
+          password: 'fun7pass'
+        }
+      }));
+    
+      // Check if ads are enabled
+      if (adsResponse.data.ads === 'you shall not pass!') {
+        throw new Error('you shall not pass!');
       }
-    }));
-
-    // Check if ads are enabled
-    if(adsResponse.data.ads === 'you shall not pass!' ) 
-    throw new Error ('you shall not pass!')
+    } catch (error) {
+      if (error.message === 'you shall not pass!') {
+        throw error; // Re-throw the specific error 'you shall not pass!'
+      } else {
+        throw new Error('There was an unexpected problem, retry');
+      }
+    }
+    }
 
     // Check if the priority is between 1 and 10
     if (priority < 1 || priority > 10) {

@@ -25,6 +25,7 @@ export class EventsController {
   @ApiResponse({
     status: 201,
     description: 'Event successfully created.',
+    type: [EventDto],
   })
   @ApiResponse({
     status: 400,
@@ -43,6 +44,7 @@ export class EventsController {
   @ApiResponse({
     status: 200,
     description: 'Event successfully updated.',
+    type: [EventDto],
   })
   @ApiResponse({
     status: 400,
@@ -63,6 +65,7 @@ export class EventsController {
   @ApiResponse({
     status: 200,
     description: 'Event successfully updated.',
+    type: [EventDto],
   })
   @ApiResponse({
     status: 400,

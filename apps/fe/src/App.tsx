@@ -1,126 +1,43 @@
 import {
-  Table,
-  ActionIcon,
-  Container,
   AppShell,
   Burger,
   Flex,
   Title,
-  Modal,
-  Button,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react';
-import { EventsApi, EventDto } from './api/api.ts';
-import { useEffect, useState } from 'react';
-import CreateEventForm from './components/createEventForm.tsx';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import EventTable from './components/eventTable.tsx';
 
+const queryClient = new QueryClient()
 
-function deleteEvent(eventsApi:EventsApi, eventId: number){
-
-  eventsApi
-  .eventsControllerDeleteEvent(eventId)
-  .then((response) => {
-    console.log(response)
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-}
 
 const App: React.FC = () => {
   const [openedBurger, { toggle: toggleBurger }] = useDisclosure();
-  const [openedModal, { open: openModal, close: closeModal }] = useDisclosure(false);
-  const [events, setEvents] = useState<EventDto[]>();
-  const [selectedEvent, setSelectedEvent] = useState<EventDto | undefined>(undefined);
-
-  const eventsApi = new EventsApi();
-
-
-  useEffect(() => {
-    eventsApi
-      .eventsControllerGetEvents()
-      .then((response) => {
-        setEvents(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-
-  const rows = events?.map((event) => (
-    <Table.Tr key={event.id}>
-      <Table.Td>{event.name}</Table.Td>
-      <Table.Td>{event.description}</Table.Td>
-      <Table.Td>{event.type}</Table.Td>
-      <Table.Td>{event.priority}</Table.Td>
-      <Table.Td>
-        <Flex gap="md">
-          <ActionIcon
-            styles={{root:{backgroundColor:"orange"}}} 
-            onClick={() => {
-              setSelectedEvent(event);
-              openModal();
-            }}
-          >
-            <IconEdit />
-          </ActionIcon>
-          <ActionIcon styles={{root:{backgroundColor:"red"}}} onClick={() => deleteEvent(eventsApi, event.id)}>
-            <IconTrash />
-          </ActionIcon>
-        </Flex>
-      </Table.Td>
-    </Table.Tr>
-  ));
 
   return (
-    <AppShell
-      header={{ height: 60 }}
-      navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !openedBurger } }}
-      padding="md"
-    >
-      <AppShell.Header>
-        <Burger opened={openedBurger} onClick={toggleBurger} hiddenFrom="sm" size="sm" />
-        <Flex justify="center">
-          <Title order={1}>Event Log App</Title>
-        </Flex>
-      </AppShell.Header>
-
-      <AppShell.Navbar p="md"></AppShell.Navbar>
-
-      <AppShell.Main>
-        <Container>
-          <Flex justify={'end'}>
-            <Button
-              my="md"
-              rightSection={<IconPlus />}
-              onClick={() => {
-                setSelectedEvent(undefined);
-                openModal();
-              }}
-            >
-              New Event
-            </Button>
+    <QueryClientProvider client={queryClient}>
+      <AppShell
+        header={{ height: 60 }}
+        navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !openedBurger } }}
+        padding="md"
+      >
+        <AppShell.Header>
+          <Burger opened={openedBurger} onClick={toggleBurger} hiddenFrom="sm" size="sm" />
+          <Flex justify="center">
+            <Title order={1}>Event Log App</Title>
           </Flex>
-          <Table>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Name</Table.Th>
-                <Table.Th>Description</Table.Th>
-                <Table.Th>Type</Table.Th>
-                <Table.Th>Priority</Table.Th>
-                <Table.Th>Actions</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>{rows}</Table.Tbody>
-          </Table>
-        </Container>
-      </AppShell.Main>
+        </AppShell.Header>
 
-      <Modal opened={openedModal} onClose={closeModal} title="CreateEvent">
-        <CreateEventForm row={selectedEvent} onClose={closeModal} />
-      </Modal>
-    </AppShell>
+        <AppShell.Navbar p="md"></AppShell.Navbar>
+
+        <AppShell.Main>
+            <EventTable></EventTable>
+        </AppShell.Main>
+
+      </AppShell>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 };
 

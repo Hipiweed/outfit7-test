@@ -379,7 +379,7 @@ export const EventsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async eventsControllerCreateEvent(country: string, createEventDto: CreateEventDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async eventsControllerCreateEvent(country: string, createEventDto: CreateEventDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<EventDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.eventsControllerCreateEvent(country, createEventDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -390,7 +390,7 @@ export const EventsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async eventsControllerDeleteEvent(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async eventsControllerDeleteEvent(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<EventDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.eventsControllerDeleteEvent(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -413,7 +413,7 @@ export const EventsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async eventsControllerUpdateEvent(id: number, country: string, createEventDto: CreateEventDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async eventsControllerUpdateEvent(id: number, country: string, createEventDto: CreateEventDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<EventDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.eventsControllerUpdateEvent(id, country, createEventDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -435,7 +435,7 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eventsControllerCreateEvent(country: string, createEventDto: CreateEventDto, options?: any): AxiosPromise<void> {
+        eventsControllerCreateEvent(country: string, createEventDto: CreateEventDto, options?: any): AxiosPromise<Array<EventDto>> {
             return localVarFp.eventsControllerCreateEvent(country, createEventDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -445,7 +445,7 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eventsControllerDeleteEvent(id: number, options?: any): AxiosPromise<void> {
+        eventsControllerDeleteEvent(id: number, options?: any): AxiosPromise<Array<EventDto>> {
             return localVarFp.eventsControllerDeleteEvent(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -466,7 +466,7 @@ export const EventsApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eventsControllerUpdateEvent(id: number, country: string, createEventDto: CreateEventDto, options?: any): AxiosPromise<void> {
+        eventsControllerUpdateEvent(id: number, country: string, createEventDto: CreateEventDto, options?: any): AxiosPromise<Array<EventDto>> {
             return localVarFp.eventsControllerUpdateEvent(id, country, createEventDto, options).then((request) => request(axios, basePath));
         },
     };

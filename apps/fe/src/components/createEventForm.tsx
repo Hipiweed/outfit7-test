@@ -1,12 +1,16 @@
 import { isNotEmpty, useForm } from '@mantine/form';
-import { TextInput, Textarea, Select, Button, NumberInput } from '@mantine/core';
 import { CreateEventDto, EventDto, EventType, EventsApi } from '../api';
 import axios from 'axios';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Button, NumberInput, Select, TextInput, Textarea } from '@mantine/core';
+
 
 interface IProps {
   row?: EventDto;
   onClose: () => void;
 }
+
+
 async function getCountryCode() {
   try {
     const response = await axios.get('http://ip-api.com/json/?fields=countryCode');
@@ -22,17 +26,23 @@ async function getCountryCode() {
   const eventsApi = new EventsApi();
   const countryCode = await getCountryCode()
   if (id) {
-    eventsApi.eventsControllerUpdateEvent(id, countryCode, eventData).catch((error) => {
-      console.log(error);
-    });
+   return eventsApi.eventsControllerUpdateEvent(id, countryCode, eventData)
   } else {
-    eventsApi.eventsControllerCreateEvent(countryCode, eventData,).catch((error) => {
-      console.log(error);
-    });
+    return eventsApi.eventsControllerCreateEvent(countryCode, eventData,)
   }
 }
 
 const CreateEventForm: React.FC<IProps> = ({ row, onClose }) => {
+  const queryClient = useQueryClient()
+
+  const saveEventMutation = useMutation({
+    mutationFn: async (values: CreateEventDto) => await saveEvent(values, row?.id),
+    onSuccess() {
+      queryClient.invalidateQueries(["event"]);
+      onClose();
+    },
+    onError() {}
+  })
   const form = useForm<CreateEventDto>({
     initialValues: {
       name: row?.name ?? '',
@@ -52,11 +62,7 @@ const CreateEventForm: React.FC<IProps> = ({ row, onClose }) => {
   const eventTypeOptions = Object.values(EventType);
 
   return (
-    <form
-      onSubmit={form.onSubmit(async (values: CreateEventDto) => {
-        await saveEvent(values, row?.id), onClose();
-      })}
-    >
+    <form onSubmit={form.onSubmit(async (values: CreateEventDto) =>  saveEventMutation.mutate(values))}>
       <TextInput label="Name" id="name" my="sm" {...form.getInputProps('name')} />
       <Textarea
         label="Description"
