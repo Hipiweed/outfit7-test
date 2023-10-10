@@ -1,4 +1,4 @@
-import { EVENT_TYPE, EventType } from 'src/types/event-types';
+import { EVENT_TYPE, EventType } from '../types/event-types';
 import { Entity, PrimaryGeneratedColumn, Column, Check } from 'typeorm';
 
 @Entity()

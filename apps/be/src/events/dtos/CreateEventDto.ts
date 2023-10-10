@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { EVENT_TYPE, EventType } from 'src/types/event-types';
+import { EVENT_TYPE, EventType } from '../../types/event-types';
 
 export class CreateEventDto {
   @ApiProperty({ description: 'The name of the event.' })

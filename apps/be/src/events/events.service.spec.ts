@@ -1,18 +1,34 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Repository } from 'typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Event } from '../entities/Event';
+import { HttpModule } from '@nestjs/axios';
+import { EventsController } from './events.controller';
 import { EventsService } from './events.service';
+import { Test, TestingModule } from '@nestjs/testing';
+import { CreateEventDto } from './dtos/CreateEventDTO';
 
-describe('EventsService', () => {
-  let service: EventsService;
+describe('EventsController', () => {
+  let eventsController: EventsController;
+  let eventsService: EventsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [EventsService],
+      imports: [HttpModule],
+      controllers: [EventsController],
+      providers: [
+        EventsService,
+        {
+          provide: getRepositoryToken(Event),
+          useClass: Repository,
+        },
+      ],
     }).compile();
 
-    service = module.get<EventsService>(EventsService);
+    eventsController = module.get<EventsController>(EventsController);
+    eventsService = module.get<EventsService>(EventsService);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(eventsService).toBeDefined();
   });
 });
