@@ -45,10 +45,7 @@ export class EventsController {
     status: 400,
     description: 'Invalid input.',
   })
-  async updateEvent(
-    @Param('id') eventId: number,
-    @Body() createEventDto: CreateEventDto,
-  ) {
+  async updateEvent(@Param('id') eventId: number, @Body() createEventDto: CreateEventDto) {
     return await this.eventsService.updateEvent(eventId, createEventDto);
   }
 }
