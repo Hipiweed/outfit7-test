@@ -30,8 +30,11 @@ export class EventsController {
     status: 400,
     description: 'Invalid input.',
   })
-  async createEvent(@Body() createEventDto: CreateEventDto) {
-    return await this.eventsService.createEvent(createEventDto);
+  async createEvent(
+    @Body() createEventDto: CreateEventDto,
+    @Param('country') countryCode: string, 
+    ) {
+    return await this.eventsService.createEvent(countryCode, createEventDto);
   }
 
   @Put(':id')
@@ -45,9 +48,13 @@ export class EventsController {
     status: 400,
     description: 'Invalid input.',
   })
-  async updateEvent(@Param('id', ParseIntPipe) eventId: number, @Body() createEventDto: CreateEventDto) {
-    return await this.eventsService.updateEvent(eventId, createEventDto);
-  }
+  async updateEvent(
+    @Param('id', ParseIntPipe) eventId: number, 
+    @Param('country') countryCode: string, 
+    @Body() createEventDto: CreateEventDto
+    ) { 
+      return await this.eventsService.updateEvent(eventId, countryCode, createEventDto);
+    }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete an existing event' })

@@ -7,13 +7,26 @@ import {
   Flex,
   Title,
   Modal,
-  Button
+  Button,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react';
 import { EventsApi, EventDto } from './api/api.ts';
 import { useEffect, useState } from 'react';
 import CreateEventForm from './components/createEventForm.tsx';
+
+
+function deleteEvent(eventsApi:EventsApi, eventId: number){
+
+  eventsApi
+  .eventsControllerDeleteEvent(eventId)
+  .then((response) => {
+    console.log(response)
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+}
 
 const App: React.FC = () => {
   const [openedBurger, { toggle: toggleBurger }] = useDisclosure();
@@ -22,6 +35,7 @@ const App: React.FC = () => {
   const [selectedEvent, setSelectedEvent] = useState<EventDto | undefined>(undefined);
 
   const eventsApi = new EventsApi();
+
 
   useEffect(() => {
     eventsApi
@@ -43,6 +57,7 @@ const App: React.FC = () => {
       <Table.Td>
         <Flex gap="md">
           <ActionIcon
+            styles={{root:{backgroundColor:"orange"}}} 
             onClick={() => {
               setSelectedEvent(event);
               openModal();
@@ -50,7 +65,7 @@ const App: React.FC = () => {
           >
             <IconEdit />
           </ActionIcon>
-          <ActionIcon>
+          <ActionIcon styles={{root:{backgroundColor:"red"}}} onClick={() => deleteEvent(eventsApi, event.id)}>
             <IconTrash />
           </ActionIcon>
         </Flex>
