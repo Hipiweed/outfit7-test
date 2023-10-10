@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put, Param } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Param, ParseIntPipe, Delete } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateEventDto, EventDto } from './dtos/CreateEventDTO';
 import { EventsService } from './events.service';
@@ -45,7 +45,23 @@ export class EventsController {
     status: 400,
     description: 'Invalid input.',
   })
-  async updateEvent(@Param('id') eventId: number, @Body() createEventDto: CreateEventDto) {
+  async updateEvent(@Param('id', ParseIntPipe) eventId: number, @Body() createEventDto: CreateEventDto) {
     return await this.eventsService.updateEvent(eventId, createEventDto);
   }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete an existing event' })
+  @ApiResponse({
+    status: 200,
+    description: 'Event successfully updated.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid input.',
+  })
+  async deleteEvent(@Param('id', ParseIntPipe) eventId: number) {
+    return await this.eventsService.deleteEvent(eventId);
+  }
 }
+
+

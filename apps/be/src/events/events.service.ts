@@ -60,4 +60,17 @@ export class EventsService {
     // Update the event
     return await this.userRepo.update({ id: eventId }, { ...eventDetails });
   }
+
+  async deleteEvent(eventId) {
+
+        // Retrieve the existing event
+        const existingEvent = await this.userRepo.findOne({
+          where: { id: eventId },
+        });
+    
+        if (!existingEvent) {
+          throw new Error('Event not found');
+        }
+    return this.userRepo.delete(existingEvent)
+  }
 }
