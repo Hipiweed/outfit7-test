@@ -19,7 +19,7 @@ export class EventsController {
     return await this.eventsService.getEvents();
   }
 
-  @Post()
+  @Post(':country')
   @ApiOperation({ summary: 'Create a new event' })
   @ApiBody({ type: CreateEventDto })
   @ApiResponse({
@@ -37,7 +37,7 @@ export class EventsController {
     return await this.eventsService.createEvent(countryCode, createEventDto);
   }
 
-  @Put(':id')
+  @Put(':country/:id')
   @ApiOperation({ summary: 'Update an existing event' })
   @ApiBody({ type: CreateEventDto })
   @ApiResponse({
@@ -53,7 +53,9 @@ export class EventsController {
     @Param('country') countryCode: string, 
     @Body() createEventDto: CreateEventDto
     ) { 
+      console.log(`🚀 ~ countryCode:`, countryCode)
       return await this.eventsService.updateEvent(eventId, countryCode, createEventDto);
+
     }
 
   @Delete(':id')

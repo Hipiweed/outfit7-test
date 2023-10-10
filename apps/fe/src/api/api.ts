@@ -226,7 +226,7 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
             assertParamExists('eventsControllerCreateEvent', 'country', country)
             // verify required parameter 'createEventDto' is not null or undefined
             assertParamExists('eventsControllerCreateEvent', 'createEventDto', createEventDto)
-            const localVarPath = `/events`
+            const localVarPath = `/events/{country}`
                 .replace(`{${"country"}}`, encodeURIComponent(String(country)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -333,7 +333,7 @@ export const EventsApiAxiosParamCreator = function (configuration?: Configuratio
             assertParamExists('eventsControllerUpdateEvent', 'country', country)
             // verify required parameter 'createEventDto' is not null or undefined
             assertParamExists('eventsControllerUpdateEvent', 'createEventDto', createEventDto)
-            const localVarPath = `/events/{id}`
+            const localVarPath = `/events/{country}/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)))
                 .replace(`{${"country"}}`, encodeURIComponent(String(country)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.

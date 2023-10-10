@@ -1,20 +1,32 @@
 import { isNotEmpty, useForm } from '@mantine/form';
 import { TextInput, Textarea, Select, Button, NumberInput } from '@mantine/core';
 import { CreateEventDto, EventDto, EventType, EventsApi } from '../api';
+import axios from 'axios';
 
 interface IProps {
   row?: EventDto;
   onClose: () => void;
 }
+async function getCountryCode() {
+  try {
+    const response = await axios.get('http://ip-api.com/json/?fields=countryCode');
+    const countryCode = response.data.countryCode;
+    return countryCode;
+  } catch (error) {
+    console.error('Error fetching country code:', error);
+    return null;
+  }
+}
 
-function SaveEvent(eventData: CreateEventDto, id?: number) {
+ async function saveEvent(eventData: CreateEventDto, id?: number) {
   const eventsApi = new EventsApi();
+  const countryCode = await getCountryCode()
   if (id) {
-    eventsApi.eventsControllerUpdateEvent(id, eventData).catch((error) => {
+    eventsApi.eventsControllerUpdateEvent(id, countryCode, eventData).catch((error) => {
       console.log(error);
     });
   } else {
-    eventsApi.eventsControllerCreateEvent(eventData).catch((error) => {
+    eventsApi.eventsControllerCreateEvent(countryCode, eventData,).catch((error) => {
       console.log(error);
     });
   }
@@ -41,8 +53,8 @@ const CreateEventForm: React.FC<IProps> = ({ row, onClose }) => {
 
   return (
     <form
-      onSubmit={form.onSubmit((values: CreateEventDto) => {
-        SaveEvent(values, row?.id), onClose();
+      onSubmit={form.onSubmit(async (values: CreateEventDto) => {
+        await saveEvent(values, row?.id), onClose();
       })}
     >
       <TextInput label="Name" id="name" my="sm" {...form.getInputProps('name')} />
