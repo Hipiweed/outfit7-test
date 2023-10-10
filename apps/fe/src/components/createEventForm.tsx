@@ -2,7 +2,9 @@ import { isNotEmpty, useForm } from '@mantine/form';
 import { CreateEventDto, EventDto, EventType, EventsApi } from '../api';
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button, NumberInput, Select, TextInput, Textarea } from '@mantine/core';
+import { Button, NumberInput, Select, TextInput, Textarea, rem } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconX } from '@tabler/icons-react';
 
 
 interface IProps {
@@ -34,14 +36,30 @@ async function getCountryCode() {
 
 const CreateEventForm: React.FC<IProps> = ({ row, onClose }) => {
   const queryClient = useQueryClient()
+  const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
+  const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />;
 
   const saveEventMutation = useMutation({
     mutationFn: async (values: CreateEventDto) => await saveEvent(values, row?.id),
     onSuccess() {
       queryClient.invalidateQueries(["event"]);
       onClose();
+      notifications.show({
+        icon: checkIcon,
+        color: "teal",
+        title: "All good!",
+        message: "Everything is fine",
+      })
     },
-    onError() {}
+    
+    onError() {
+      notifications.show({
+        icon: xIcon,
+        color: "red",
+        title: "Bummer!",
+        message: "Something went wrong, retry"
+      })
+    }
   })
   const form = useForm<CreateEventDto>({
     initialValues: {
