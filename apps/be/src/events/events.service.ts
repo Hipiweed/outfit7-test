@@ -21,7 +21,6 @@ export class EventsService {
   async createEvent(countryCode: string, eventDetails: CreateEvent) {
     const { name, priority } = eventDetails;
 
-
     // Check if the priority is between 1 and 10
     if (priority < 1 || priority > 10) {
       throw new Error('Priority must be between 1 and 10');

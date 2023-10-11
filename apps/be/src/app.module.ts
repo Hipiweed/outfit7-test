@@ -17,7 +17,7 @@ import { join } from 'path';
     ConfigModule.forRoot(),
     EventsModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../..', 'fe','dist'),
+      rootPath: join(__dirname, '../..', 'fe', 'dist'),
     }),
   ],
   controllers: [],
