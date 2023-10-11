@@ -6,12 +6,10 @@ import { Button, NumberInput, Select, TextInput, Textarea, rem } from '@mantine/
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 
-
 interface IProps {
   row?: EventDto;
   onClose: () => void;
 }
-
 
 async function getCountryCode() {
   try {
@@ -24,43 +22,43 @@ async function getCountryCode() {
   }
 }
 
- async function saveEvent(eventData: CreateEventDto, id?: number) {
+async function saveEvent(eventData: CreateEventDto, id?: number) {
   const eventsApi = new EventsApi();
-  const countryCode = await getCountryCode()
+  const countryCode = await getCountryCode();
   if (id) {
-   return eventsApi.eventsControllerUpdateEvent(id, countryCode, eventData)
+    return eventsApi.eventsControllerUpdateEvent(id, countryCode, eventData);
   } else {
-    return eventsApi.eventsControllerCreateEvent(countryCode, eventData,)
+    return eventsApi.eventsControllerCreateEvent(countryCode, eventData);
   }
 }
 
 const CreateEventForm: React.FC<IProps> = ({ row, onClose }) => {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
   const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />;
 
   const saveEventMutation = useMutation({
     mutationFn: async (values: CreateEventDto) => await saveEvent(values, row?.id),
     onSuccess() {
-      queryClient.invalidateQueries(["event"]);
+      queryClient.invalidateQueries(['event']);
       onClose();
       notifications.show({
         icon: checkIcon,
-        color: "teal",
-        title: "All good!",
-        message: "Everything is fine",
-      })
+        color: 'teal',
+        title: 'All good!',
+        message: 'Everything is fine'
+      });
     },
-    
+
     onError() {
       notifications.show({
         icon: xIcon,
-        color: "red",
-        title: "Bummer!",
-        message: "Something went wrong, retry"
-      })
+        color: 'red',
+        title: 'Bummer!',
+        message: 'Something went wrong, retry'
+      });
     }
-  })
+  });
   const form = useForm<CreateEventDto>({
     initialValues: {
       name: row?.name ?? '',
@@ -80,7 +78,9 @@ const CreateEventForm: React.FC<IProps> = ({ row, onClose }) => {
   const eventTypeOptions = Object.values(EventType);
 
   return (
-    <form onSubmit={form.onSubmit(async (values: CreateEventDto) =>  saveEventMutation.mutate(values))}>
+    <form
+      onSubmit={form.onSubmit(async (values: CreateEventDto) => saveEventMutation.mutate(values))}
+    >
       <TextInput label="Name" id="name" my="sm" {...form.getInputProps('name')} />
       <Textarea
         label="Description"

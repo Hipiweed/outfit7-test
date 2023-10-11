@@ -40,13 +40,12 @@ describe('EventsController', () => {
   describe('createEvent', () => {
     it('should create a new event', async () => {
       const eventDto: CreateEventDto = {
-        "name": "string",
-        "description": "string",
-        "type": "CROSSPROMO",
-        "priority": 0
+        name: 'string',
+        description: 'string',
+        type: 'CROSSPROMO',
+        priority: 0,
       };
-      const result = void
-      jest.spyOn(eventsService, 'createEvent').mockImplementation(() => result);
+      const result = void jest.spyOn(eventsService, 'createEvent').mockImplementation(() => result);
 
       expect(await eventsController.createEvent(eventDto, 'US')).toBe(result);
     });
