@@ -52,7 +52,6 @@ export class EventsController {
     @Param('country') countryCode: string,
     @Body() createEventDto: CreateEventDto,
   ) {
-    console.log(`🚀 ~ countryCode:`, countryCode);
     return await this.eventsService.updateEvent(eventId, countryCode, createEventDto);
   }
 
