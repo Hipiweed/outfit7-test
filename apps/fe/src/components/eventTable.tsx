@@ -1,4 +1,4 @@
-import { Table, ActionIcon, Container, Flex, Modal, Button, LoadingOverlay } from '@mantine/core';
+import { Table, ActionIcon, Container, Flex, Modal, Button, LoadingOverlay, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -30,33 +30,44 @@ const EventTable: React.FC = () => {
     onError() {}
   });
 
-  const rows = getEvents.data?.data?.map((event) => (
-    <Table.Tr key={event.id}>
-      <Table.Td>{event.name}</Table.Td>
-      <Table.Td>{event.description}</Table.Td>
-      <Table.Td>{event.type}</Table.Td>
-      <Table.Td>{event.priority}</Table.Td>
-      <Table.Td>
-        <Flex gap="md">
-          <ActionIcon
-            styles={{ root: { backgroundColor: 'orange' } }}
-            onClick={() => {
-              setSelectedEvent(event);
-              openModal();
-            }}
-          >
-            <IconEdit />
-          </ActionIcon>
-          <ActionIcon
-            styles={{ root: { backgroundColor: 'red' } }}
-            onClick={() => deleteEventMutation.mutate(event.id)}
-          >
-            <IconTrash />
-          </ActionIcon>
-        </Flex>
-      </Table.Td>
-    </Table.Tr>
-  ));
+  let rows = null;
+  if (getEvents.data?.data?.length === 0) {
+    rows = (
+      <Table.Tr>
+        <Table.Td colSpan={5}>
+          <Text size='lg' pt="lg" pl="lg">No events available. Press New Event button to add Event</Text>
+        </Table.Td>
+      </Table.Tr>
+    );
+  } else {
+    rows = getEvents.data?.data?.map((event) => (
+      <Table.Tr key={event.id}>
+        <Table.Td>{event.name}</Table.Td>
+        <Table.Td>{event.description}</Table.Td>
+        <Table.Td>{event.type}</Table.Td>
+        <Table.Td>{event.priority}</Table.Td>
+        <Table.Td>
+          <Flex gap="md">
+            <ActionIcon
+              styles={{ root: { backgroundColor: 'orange' } }}
+              onClick={() => {
+                setSelectedEvent(event);
+                openModal();
+              }}
+            >
+              <IconEdit />
+            </ActionIcon>
+            <ActionIcon
+              styles={{ root: { backgroundColor: 'red' } }}
+              onClick={() => deleteEventMutation.mutate(event.id)}
+            >
+              <IconTrash />
+            </ActionIcon>
+          </Flex>
+        </Table.Td>
+      </Table.Tr>
+    ));
+  }
 
   return (
     <Container>

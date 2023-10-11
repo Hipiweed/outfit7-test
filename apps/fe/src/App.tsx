@@ -1,4 +1,4 @@
-import { AppShell, Burger, Flex, Menu, MenuItem, Title } from '@mantine/core';
+import { AppShell, Burger, Group, Menu, MenuItem, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import EventTable from './components/eventTable.tsx';
@@ -19,7 +19,7 @@ const App: React.FC = () => {
           padding="md"
         >
           <AppShell.Header>
-            <Flex ml="30px" justify="start" align="center">
+            <Group h="100%" px="md">
               <Burger
                 mr="lg"
                 opened={openedBurger}
@@ -27,8 +27,8 @@ const App: React.FC = () => {
                 hiddenFrom="sm"
                 size="sm"
               />
-              <Title order={1}>Event Log App</Title>
-            </Flex>
+              <Title order={2}>Event Log App</Title>
+            </Group>
           </AppShell.Header>
 
           <AppShell.Navbar p="md">
