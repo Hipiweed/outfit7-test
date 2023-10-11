@@ -9,42 +9,50 @@ import { CreateEventDto, EventDto } from './dtos/CreateEventDTO';
 
 describe('EventsService', () => {
   let eventsService: EventsService;
+  let eventRepository: Repository<Event>;
 
-  const mockEvents: Event[] = [{   
+  const mockEvents: Event[] = [
+    {
+      id: 1,
+      name: 'Test Event',
+      description: 'Test Description',
+      type: 'CROSSPROMO',
+      priority: 0,
+    },
+    {
+      id: 2,
+      name: 'Test Event2',
+      description: 'Test Description',
+      type: 'CROSSPROMO',
+      priority: 0,
+    },
+  ];
+
+  const mockEvent: Event = {
     id: 1,
     name: 'Test Event',
     description: 'Test Description',
     type: 'CROSSPROMO',
-    priority: 0, }, {   id: 2,
-      name: 'Test Event2',
-      description: 'Test Description',
-      type: 'CROSSPROMO',
-      priority: 0, }];
+    priority: 0,
+  };
 
-      const mockEvent: Event = {   
-        id: 1,
-        name: 'Test Event',
-        description: 'Test Description',
-        type: 'CROSSPROMO',
-        priority: 0, };
+  const createEventDto: CreateEventDto = {
+    name: 'Test Event',
+    description: 'Test Description',
+    type: 'CROSSPROMO',
+    priority: 0,
+  };
 
-        const createEventDto: CreateEventDto = {
-          name: 'Test Event',
-          description: 'Test Description',
-          type: 'CROSSPROMO',
-          priority: 0,
-        };
+  const updateResult: UpdateResult = {
+    raw: [],
+    generatedMaps: [],
+    affected: 1,
+  };
 
-        const updateResult: UpdateResult = {
-          raw: [],
-          generatedMaps: [],
-          affected: 1,
-        };
-        
-        const deletedResult: DeleteResult = {
-          raw: [],
-          affected: 1,
-        };
+  const deletedResult: DeleteResult = {
+    raw: [],
+    affected: 1,
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -58,7 +66,9 @@ describe('EventsService', () => {
         },
       ],
     }).compile();
+  
     eventsService = module.get<EventsService>(EventsService);
+    eventRepository = module.get<Repository<Event>>(getRepositoryToken(Event));
   });
 
   it('should be defined', () => {
@@ -67,9 +77,8 @@ describe('EventsService', () => {
 
   describe('getEvents', () => {
     it('should return an array of events', async () => {
-      // Mock the behavior of the userRepo.find() method
-
-      jest.spyOn(eventsService['userRepo'], 'find').mockResolvedValue(mockEvents);
+      // Mock the behavior of the eventRepository.find() method
+      jest.spyOn(eventRepository, 'find').mockResolvedValue(mockEvents);
 
       // Call the getEvents() method
       const result = await eventsService.getEvents();
@@ -79,4 +88,4 @@ describe('EventsService', () => {
     });
   });
 
-})
+});

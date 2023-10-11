@@ -6,6 +6,7 @@ import { Event } from '../entities/Event';
 import { HttpModule } from '@nestjs/axios';
 
 @Module({
+  
   imports: [TypeOrmModule.forFeature([Event]), HttpModule],
   controllers: [EventsController],
   providers: [EventsService],
