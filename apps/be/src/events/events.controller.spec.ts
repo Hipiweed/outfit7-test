@@ -92,9 +92,8 @@ describe('EventsController', () => {
         generatedMaps: [],
         affected: 1,
       };
-      
+
       jest.spyOn(eventsService, 'updateEvent').mockResolvedValue(Promise.resolve(updateResult));
-      
 
       jest.spyOn(eventsService, 'updateEvent').mockResolvedValue(updateResult);
 

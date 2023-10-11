@@ -67,7 +67,7 @@ describe('EventsService', () => {
         },
       ],
     }).compile();
-  
+
     eventsService = module.get<EventsService>(EventsService);
     eventRepository = module.get<Repository<Event>>(getRepositoryToken(Event));
   });
@@ -100,10 +100,12 @@ describe('EventsService', () => {
       jest.spyOn(eventRepository, 'create').mockReturnValue(mockNewEvent);
       jest.spyOn(eventRepository, 'save').mockResolvedValue(mockNewEvent);
 
-      const result = await eventsService.createEvent("SL", mockEventDetails);
+      const result = await eventsService.createEvent('SL', mockEventDetails);
 
       expect(result).toEqual(mockNewEvent);
-      expect(eventRepository.findOne).toHaveBeenCalledWith({ where: { name: mockEventDetails.name } });
+      expect(eventRepository.findOne).toHaveBeenCalledWith({
+        where: { name: mockEventDetails.name },
+      });
       expect(eventRepository.create).toHaveBeenCalledWith(mockEventDetails);
       expect(eventRepository.save).toHaveBeenCalledWith(mockNewEvent);
     });
@@ -121,10 +123,13 @@ describe('EventsService', () => {
       };
       jest.spyOn(eventRepository, 'findOne').mockResolvedValue(mockExistingEvent);
 
-      await expect(eventsService.createEvent("SL", mockEventDetails)).rejects.toThrowError('Event with the same name already exists');
-      expect(eventRepository.findOne).toHaveBeenCalledWith({ where: { name: mockEventDetails.name } });
+      await expect(eventsService.createEvent('SL', mockEventDetails)).rejects.toThrowError(
+        'Event with the same name already exists',
+      );
+      expect(eventRepository.findOne).toHaveBeenCalledWith({
+        where: { name: mockEventDetails.name },
+      });
     });
-
   });
 
   describe('updateEvent', () => {
@@ -136,34 +141,39 @@ describe('EventsService', () => {
           return Promise.resolve(null);
         }
       });
-  
+
       jest.spyOn(eventRepository, 'update').mockResolvedValue(updateResult);
     });
-  
+
     afterEach(() => {
       jest.clearAllMocks();
     });
-  
+
     it('should update an existing event', async () => {
       const createEventDtoWithValidPriority: CreateEventDto = {
         ...createEventDto,
         priority: 5,
       };
-  
+
       const result = await eventsService.updateEvent(1, 'SL', createEventDtoWithValidPriority);
-  
+
       expect(result).toEqual(updateResult);
       expect(eventRepository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
-      expect(eventRepository.update).toHaveBeenCalledWith({ id: 1 }, createEventDtoWithValidPriority);
+      expect(eventRepository.update).toHaveBeenCalledWith(
+        { id: 1 },
+        createEventDtoWithValidPriority,
+      );
     });
-  
+
     it('should throw an error if event is not found', async () => {
-      await expect(eventsService.updateEvent(2, 'SL', createEventDto)).rejects.toThrowError('Event not found');
+      await expect(eventsService.updateEvent(2, 'SL', createEventDto)).rejects.toThrowError(
+        'Event not found',
+      );
 
       expect(eventRepository.findOne).toHaveBeenCalledWith({ where: { id: 2 } });
     });
   });
-  
+
   describe('deleteEvent', () => {
     beforeEach(() => {
       jest.spyOn(eventRepository, 'findOne').mockImplementation((query: any) => {
@@ -173,31 +183,27 @@ describe('EventsService', () => {
           return Promise.resolve(null);
         }
       });
-  
+
       jest.spyOn(eventRepository, 'delete').mockResolvedValue(deletedResult);
     });
-  
+
     afterEach(() => {
       jest.clearAllMocks();
     });
-  
+
     it('should delete an existing event', async () => {
       const result = await eventsService.deleteEvent(1);
-  
+
       expect(result).toEqual(deletedResult);
 
       expect(eventRepository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
 
       expect(eventRepository.delete).toHaveBeenCalledWith(mockEvent);
     });
-  
+
     it('should throw an error if event is not found', async () => {
       await expect(eventsService.deleteEvent(2)).rejects.toThrowError('Event not found');
       expect(eventRepository.findOne).toHaveBeenCalledWith({ where: { id: 2 } });
     });
   });
-  
-  
-  
-
 });
