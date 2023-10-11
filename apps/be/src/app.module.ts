@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DBService } from './services/dbService';
 import { EventsModule } from './events/events.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -14,6 +16,9 @@ import { EventsModule } from './events/events.module';
     }),
     ConfigModule.forRoot(),
     EventsModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../..', 'fe','dist'),
+    }),
   ],
   controllers: [],
   providers: [],
