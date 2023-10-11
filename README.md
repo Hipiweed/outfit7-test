@@ -9,7 +9,7 @@ To set up the database, use MySQL Workbench and connect to the database as an ad
 
 Next, create a user named `outfit7`. To do this, select `Users and Privileges` and add a new user by providing a username and password. In the `Schema privileges` tab for the user, add an entry, select all privileges, and click `Apply`.
 
-## Creation of Database on Server
+# Creation of Database on Server
 
 Execute the following commands:
 
@@ -22,7 +22,7 @@ FLUSH PRIVILEGES;
 ```
 
 
-## Environment Variables
+# Environment Variables
 
 Create a .env file in the apps/be root directory. Here's an example:
 
@@ -36,7 +36,7 @@ Create a .env file in the apps/be root directory. Here's an example:
 ```
 
 
-## Development
+# Development
 
 This project uses turbo. Run the following commands in the main file where your turbo.json is located:
 
@@ -52,7 +52,7 @@ This will start both the front-end (fe) at http://localhost:5173/ and the back-e
 
 Swagger documentation can be accessed at http://localhost:3000/api.
 
-## Production
+# Production
 
 In the main file where your turbo.json is located, run the following commands:
 
