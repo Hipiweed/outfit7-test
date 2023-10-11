@@ -6,6 +6,7 @@ import { EventsController } from './events.controller';
 import { EventsService } from './events.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateEventDto, EventDto } from './dtos/CreateEventDTO';
+import { CreateEvent, EVENT_TYPE } from '../types/event-types';
 
 describe('EventsService', () => {
   let eventsService: EventsService;
@@ -77,15 +78,126 @@ describe('EventsService', () => {
 
   describe('getEvents', () => {
     it('should return an array of events', async () => {
-      // Mock the behavior of the eventRepository.find() method
       jest.spyOn(eventRepository, 'find').mockResolvedValue(mockEvents);
-
-      // Call the getEvents() method
       const result = await eventsService.getEvents();
-
-      // Assert that the result is an array of events
       expect(result).toEqual(mockEvents);
     });
   });
+
+  describe('createEvent', () => {
+    it('should create a new event', async () => {
+      const mockEventDetails: CreateEvent = {
+        name: 'New Event',
+        description: 'This is a new event',
+        type: EVENT_TYPE.APP,
+        priority: 5,
+      };
+      const mockNewEvent: Event = {
+        id: 1,
+        ...mockEventDetails,
+      };
+      jest.spyOn(eventRepository, 'findOne').mockResolvedValue(null);
+      jest.spyOn(eventRepository, 'create').mockReturnValue(mockNewEvent);
+      jest.spyOn(eventRepository, 'save').mockResolvedValue(mockNewEvent);
+
+      const result = await eventsService.createEvent("SL", mockEventDetails);
+
+      expect(result).toEqual(mockNewEvent);
+      expect(eventRepository.findOne).toHaveBeenCalledWith({ where: { name: mockEventDetails.name } });
+      expect(eventRepository.create).toHaveBeenCalledWith(mockEventDetails);
+      expect(eventRepository.save).toHaveBeenCalledWith(mockNewEvent);
+    });
+
+    it('should throw an error if event name already exists', async () => {
+      const mockEventDetails: CreateEvent = {
+        name: 'Existing Event',
+        description: 'This is an existing event',
+        type: EVENT_TYPE.CROSSPROMO,
+        priority: 3,
+      };
+      const mockExistingEvent: Event = {
+        id: 1,
+        ...mockEventDetails,
+      };
+      jest.spyOn(eventRepository, 'findOne').mockResolvedValue(mockExistingEvent);
+
+      await expect(eventsService.createEvent("SL", mockEventDetails)).rejects.toThrowError('Event with the same name already exists');
+      expect(eventRepository.findOne).toHaveBeenCalledWith({ where: { name: mockEventDetails.name } });
+    });
+
+  });
+
+  describe('updateEvent', () => {
+    beforeEach(() => {
+      jest.spyOn(eventRepository, 'findOne').mockImplementation((query: any) => {
+        if (query.where && query.where.id === 1) {
+          return Promise.resolve(mockEvent);
+        } else {
+          return Promise.resolve(null);
+        }
+      });
+  
+      jest.spyOn(eventRepository, 'update').mockResolvedValue(updateResult);
+    });
+  
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+  
+    it('should update an existing event', async () => {
+      const createEventDtoWithValidPriority: CreateEventDto = {
+        ...createEventDto,
+        priority: 5,
+      };
+  
+      const result = await eventsService.updateEvent(1, 'SL', createEventDtoWithValidPriority);
+  
+      expect(result).toEqual(updateResult);
+      expect(eventRepository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
+      expect(eventRepository.update).toHaveBeenCalledWith({ id: 1 }, createEventDtoWithValidPriority);
+    });
+  
+    it('should throw an error if event is not found', async () => {
+      await expect(eventsService.updateEvent(2, 'SL', createEventDto)).rejects.toThrowError('Event not found');
+
+      expect(eventRepository.findOne).toHaveBeenCalledWith({ where: { id: 2 } });
+    });
+  });
+  
+  describe('deleteEvent', () => {
+    beforeEach(() => {
+      jest.spyOn(eventRepository, 'findOne').mockImplementation((query: any) => {
+        if (query.where && query.where.id === 1) {
+          return Promise.resolve(mockEvent);
+        } else {
+          return Promise.resolve(null);
+        }
+      });
+  
+      jest.spyOn(eventRepository, 'delete').mockResolvedValue(deletedResult);
+    });
+  
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+  
+    it('should delete an existing event', async () => {
+      const result = await eventsService.deleteEvent(1);
+  
+      expect(result).toEqual(deletedResult);
+
+      expect(eventRepository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
+
+      expect(eventRepository.delete).toHaveBeenCalledWith(mockEvent);
+    });
+  
+    it('should throw an error if event is not found', async () => {
+      await expect(eventsService.deleteEvent(2)).rejects.toThrowError('Event not found');
+      expect(eventRepository.findOne).toHaveBeenCalledWith({ where: { id: 2 } });
+    });
+  });
+  
+  
+  
 
 });
