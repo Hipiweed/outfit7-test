@@ -1,60 +1,69 @@
-#### Database configuration
+# Database Configuration
 
-First you will need a MySQL server running.
+First, ensure that you have a running MySQL server.
 
-Use MySQL Workbench. Connect to database as administrator. Right-click on empty space (bottom-left) below the listing of schemas. Choose `Create schema`.
+To set up the database, use MySQL Workbench and connect to the database as an administrator. Right-click on an empty space (located at the bottom-left) below the listing of schemas and select `Create schema`.
 
 - Schema name: outfit7
 - Character set: utf8mb4
 
-Create user `outfit7`
-Choose `Users and Privileges`, add new user (username + password)
-On user set in `Schema priviledges` tab: add entry, set select all (priviledges), Apply.    
+Next, create a user named `outfit7`. To do this, select `Users and Privileges` and add a new user by providing a username and password. In the `Schema privileges` tab for the user, add an entry, select all privileges, and click `Apply`.
 
-## Creation of database on server
+## Creation of Database on Server
+
+Execute the following commands:
 
 ```
 sudo mysql
-CREATE USER 'newuser'@'localhost' IDENTIFIED BY '********';
-create database digozd
+CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'password';
+CREATE DATABASE digozd;
 GRANT ALL PRIVILEGES ON outfit7.* TO 'outfit7'@'localhost';
 FLUSH PRIVILEGES;
 ```
-## Enviroment variables
 
-You will need to create a .env in apps/be root
-example:
+
+## Environment Variables
+
+Create a .env file in the apps/be root directory. Here's an example:
+
+
 ```
-   // Databease config
-   DB_HOST=>> Database host <<
-   DB_DATABASE=>> Database name <<
-   DB_USER=>> user name <<
-   DB_PASS=>> user password <<
+   // Database config
+   DB_HOST=<< Database host >>
+   DB_DATABASE=<< Database name >>
+   DB_USER=<< username >>
+   DB_PASS=<< password >>
 ```
+
+
 ## Development
 
-Project has turbo so you will need to run in main file so were you have your turbo.json
+This project uses turbo. Run the following commands in the main file where your turbo.json is located:
 
-`npm install` fist install package
+First, install the package:
 
-`npm run dev` this will start both fe: http://localhost:5173/ and be: http://localhost:3000/
+`npm install`
 
-You can see swager docs on http://localhost:3000/api
+Then, start the development server:
+
+`npm run dev`
+
+This will start both the front-end (fe) at http://localhost:5173/ and the back-end (be) at http://localhost:3000/.
+
+Swagger documentation can be accessed at http://localhost:3000/api.
 
 ## Production
 
-Project has turbo so you will need to run in main file so were you have your turbo.json
+In the main file where your turbo.json is located, run the following commands:
 
-`npm install` fist install package
+First, install the package:
 
-`npm run build` will build both fe and be dist
+`npm install`
 
-`npm run start:prod` this will run prodcution version
+Then, build both the front-end and back-end distributions:
 
+`npm run build`
 
+Finally, run the production version:
 
-
-
-
-
-
+`npm run start:prod`
