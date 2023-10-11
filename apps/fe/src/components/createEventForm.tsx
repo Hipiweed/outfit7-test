@@ -50,12 +50,13 @@ const CreateEventForm: React.FC<IProps> = ({ row, onClose }) => {
       });
     },
 
-    onError() {
+    onError(error) {
+      console.log(error)
       notifications.show({
         icon: xIcon,
         color: 'red',
         title: 'Bummer!',
-        message: 'Something went wrong, retry'
+        message: "Make sure you dont use the same NAME. There was a problem. Retry"
       });
     }
   });
