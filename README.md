@@ -66,7 +66,7 @@ Then, build both the front-end and back-end distributions:
 
 Finally, run the production version:
 
-`npm run start:prod`
+`npm run start:prod` here you need to go to /be
 
 # Good to know
 
