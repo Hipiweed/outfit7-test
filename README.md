@@ -67,3 +67,20 @@ Then, build both the front-end and back-end distributions:
 Finally, run the production version:
 
 `npm run start:prod`
+
+# Good to know
+
+`npm run format` or `npm run lint` to format code with prittier/eslint
+`generate-api` we use it to generate fe api using OpenAPI Generate
+
+# Tests
+
+You can run thest in /be
+`npm run test` unit and integration tests 
+
+
+
+
+
+
+
